@@ -23,6 +23,8 @@ def process_data():
 
     return vocab
 
+def convert_2_index(dataset):
+    pass
 
 
 if __name__ == '__main__':
