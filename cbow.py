@@ -6,7 +6,8 @@ import string
 import numpy as np
 import tensorflow as tf
 from tensorflow import keras
-CORPUS_PATH = "./dataset/sample_test.txt"
+import jieba
+CORPUS_PATH = "./dataset/issurance_qa.txt"
 PUNCTATION = "?,.？，。！"
 
 def get_vocab_dic():
@@ -51,21 +52,31 @@ def train(model, data):
     for i in range(1000):
         x, y = data.sample(8)
 
-def translate(x, y):
+def translate(d, x, y):
     lstx = x.tolist()
     lsty = y.tolist()
+    tempx = []
+    tempy = []
 
-    tempx = [DATASET_I2V.get(v) for v in lstx[0]]
-    tempy = [DATASET_I2V.get(v) for v in lsty]
+    for item in lstx:
+        tempx.append([d.i2v.get(v) for v in item])
+
+    tempy = [d.i2v.get(v) for v in lsty]
     print(tempx, tempy)
 
 
 if __name__ == '__main__':
-    d = dataset.process_w2v_data(DATASET, skip_window=2,method='cbow')
+    # preprocess sample.txt to corpus
+    test_corpus = DATASET[0:3]
+    print(test_corpus)
+
+
+    # convert corpus to dataset
+    d = dataset.process_w2v_data(test_corpus, skip_window=2,method='cbow')
     print("vocab dictionary size = %s" %(VOCAB_SIZE))
     model = CBOW(VOCAB_SIZE, 2)
-    x,y = d.sample(1)
-    translate(x,y)
+    x,y = d.sample(10)
+    translate(d, x, y)
 
 
 
